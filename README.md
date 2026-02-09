@@ -25,7 +25,7 @@ Platform ini menggunakan pola arsitektur Client-Server
 2.  **Backend**: Menerima request dari frontend, melakukan logika bisnis, validasi, dan autentikasi JWT.
 3.  **Database**: Menyimpan data relasional seperti user, kategori game, produk, dan log transaksi.
 
-## ⌛ Loading State & Error Handling
+## Loading State & Error Handling
 
 Implementasi pengalaman pengguna yang responsif dipastikan melalui:
 
