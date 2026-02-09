@@ -6,11 +6,12 @@ import { AuthProvider } from "./context/AuthContext"
 import ProtectedRoute from "./components/ProtectedRoute"
 import Register from "./pages/Register"
 import History from "./pages/History"
-import Dashboard from "./admin/pages/Dashboard"
 import Products from "./admin/pages/Products"
 import Categories from "./admin/pages/Categories"
 import Transactions from "./admin/pages/Transactions"
+import SalesReport from "./admin/pages/SalesReport"
 import AdminRoute from "./admin/components/AdminRoute"
+import Events from "./admin/pages/Events"
 
 
 export default function App() {
@@ -18,7 +19,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}/>
+          <Route path="/" element={<Home />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
 
@@ -34,25 +35,28 @@ export default function App() {
           <Route
             path="/game/:id"
             element={
-                <GameDetail />
+              <GameDetail />
             }
           />
-          
-          <Route path="/admin" element={
-            <AdminRoute><Dashboard /></AdminRoute>
-          }/>
+
           <Route path="/admin/dashboard" element={
-            <AdminRoute><Dashboard /></AdminRoute>
-          }/>
+            <AdminRoute><Products /></AdminRoute>
+          } />
           <Route path="/admin/products" element={
             <AdminRoute><Products /></AdminRoute>
-          }/>
+          } />
           <Route path="/admin/categories" element={
             <AdminRoute><Categories /></AdminRoute>
-          }/>
+          } />
           <Route path="/admin/transactions" element={
             <AdminRoute><Transactions /></AdminRoute>
-          }/>
+          } />
+          <Route path="/admin/sales-report" element={
+            <AdminRoute><SalesReport /></AdminRoute>
+          } />
+          <Route path="/admin/events" element={
+            <AdminRoute><Events /></AdminRoute>
+          } />
 
         </Routes>
       </BrowserRouter>

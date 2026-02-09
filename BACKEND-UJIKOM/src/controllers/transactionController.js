@@ -84,3 +84,62 @@ exports.createTransaction = (req, res) => {
         });
     });
 };
+
+exports.getSalesReport = (req, res) => {
+    const { startDate, endDate } = req.query;
+
+    let sql = "SELECT total_price, created_at FROM transactions WHERE status = 'success'";
+    const params = [];
+
+    if (startDate && endDate) {
+        sql += " AND created_at BETWEEN ? AND ?";
+        params.push(startDate + ' 00:00:00', endDate + ' 23:59:59');
+    }
+
+    sql += " ORDER BY created_at ASC";
+
+    db.query(sql, params, (err, results) => {
+        if (err) return res.status(500).json({ message: 'Gagal mengambil laporan penjualan', error: err });
+
+        const summary = { totalRevenue: 0, totalTransactions: results.length };
+        const daily = {};
+        const monthly = {};
+        const yearly = {};
+
+        results.forEach(t => {
+            const date = new Date(t.created_at);
+            const price = Number(t.total_price);
+
+            summary.totalRevenue += price;
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            
+            const dayKey = `${year}-${month}-${day}`;
+            const monthKey = `${year}-${month}`;
+            const yearKey = `${year}`;
+
+            if (!daily[dayKey]) daily[dayKey] = { date: dayKey, revenue: 0, count: 0 };
+            daily[dayKey].revenue += price;
+            daily[dayKey].count++;
+
+            if (!monthly[monthKey]) monthly[monthKey] = { month: monthKey, revenue: 0, count: 0 };
+            monthly[monthKey].revenue += price;
+            monthly[monthKey].count++;
+
+            if (!yearly[yearKey]) yearly[yearKey] = { year: yearKey, revenue: 0, count: 0 };
+            yearly[yearKey].revenue += price;
+            yearly[yearKey].count++;
+        });
+
+        res.json({
+            success: true,
+            data: {
+                summary,
+                daily: Object.values(daily),
+                monthly: Object.values(monthly),
+                yearly: Object.values(yearly)
+            }
+        });
+    });
+};

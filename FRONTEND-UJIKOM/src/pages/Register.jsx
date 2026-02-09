@@ -14,83 +14,104 @@ export default function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
-        await api.post("/auth/register", {
-            name,
-            email,
-            password,
-        });
+            await api.post("/auth/register", { name, email, password });
+            const res = await api.post("/auth/login", { email, password });
 
-        const res = await api.post("/auth/login", {
-        email,
-        password,
-        })
+            localStorage.setItem("token", res.data.token)
+            const decoded = jwtDecode(res.data.token)
+            setUser(decoded)
 
-        localStorage.setItem("token", res.data.token)
-        const decoded = jwtDecode(res.data.token)
-        setUser(decoded)
-
-        navigate("/");
+            navigate("/");
         } catch (err) {
-        alert("Register gagal: " + (err.response?.data?.message || err.message))
+            alert("Register gagal: " + (err.response?.data?.message || err.message))
+        } finally {
+            setLoading(false)
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-navy px-4">
-        <form
-            onSubmit={handleSubmit}
-            className="bg-white w-full max-w-sm p-6 rounded-xl space-y-4"
-        >
-            <h1 className="text-2xl font-bold text-center text-navy">
-            Register RainStore.id💎
-            </h1>
+        <div className="min-h-screen flex items-center justify-center bg-navy-900 relative overflow-hidden px-4">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl">
+                <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-accent/20 rounded-full blur-[100px]"></div>
+                <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-[100px]"></div>
+            </div>
 
-            <input
-            type="text"
-            placeholder="Nama Lengkap"
-            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            />
+            <div className="relative w-full max-w-md">
+                <div className="glass-card p-8 shadow-2xl animate-fade-in">
+                    <div className="text-center mb-8">
+                        <h1 className="text-3xl font-bold mb-2">Buat Akun Baru 🚀</h1>
+                        <p className="text-gray-400">Daftar sekarang untuk mulai top up</p>
+                    </div>
 
-            <input
-            type="email"
-            placeholder="Email"
-            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            />
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-400 mb-2">Nama Lengkap</label>
+                            <input
+                                type="text"
+                                className="w-full bg-navy-900 border border-navy-700 rounded-lg p-3 text-white outline-none focus:border-accent focus:ring-1 focus:ring-accent transition"
+                                placeholder="John Doe"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                        </div>
 
-            <input
-            type="password"
-            placeholder="Password"
-            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            />
+                        <div>
+                            <label className="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                            <input
+                                type="email"
+                                className="w-full bg-navy-900 border border-navy-700 rounded-lg p-3 text-white outline-none focus:border-accent focus:ring-1 focus:ring-accent transition"
+                                placeholder="nama@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
 
-            <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-navy text-white py-2 rounded hover:bg-slate-800 transition disabled:opacity-60"
-            >
-            {loading ? "Loading..." : "Register"}
-            </button>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-400 mb-2">Password</label>
+                            <input
+                                type="password"
+                                className="w-full bg-navy-900 border border-navy-700 rounded-lg p-3 text-white outline-none focus:border-accent focus:ring-1 focus:ring-accent transition"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
 
-            <p className="text-center text-sm">
-            Sudah punya akun?{" "}
-            <span
-                onClick={() => navigate("/login")}
-                className="text-accent cursor-pointer font-semibold"
-            >
-                Login
-            </span>
-            </p>
-        </form>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-lg shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:shadow-[0_0_25px_rgba(14,165,233,0.5)] transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {loading ? (
+                                <span className="flex items-center justify-center gap-2">
+                                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Loading...
+                                </span>
+                            ) : "Daftar Sekarang"}
+                        </button>
+                    </form>
+
+                    <div className="mt-6 text-center">
+                        <p className="text-gray-400 text-sm">
+                            Sudah punya akun?{" "}
+                            <span
+                                onClick={() => navigate("/login")}
+                                className="text-accent cursor-pointer hover:underline font-semibold"
+                            >
+                                Login
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

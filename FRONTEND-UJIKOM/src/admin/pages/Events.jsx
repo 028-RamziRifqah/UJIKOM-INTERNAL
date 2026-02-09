@@ -2,23 +2,22 @@ import { useEffect, useState } from "react"
 import api from "../../services/api"
 import AdminLayout from "../components/AdminLayout"
 
-export default function Products() {
-    const [products, setProducts] = useState([])
+export default function Events() {
+    const [events, setEvents] = useState([])
     const [categories, setCategories] = useState([])
     const [editId, setEditId] = useState(null)
 
     const [form, setForm] = useState({
         category_id: "",
-        diamond_amount: "",
-        price: "",
+        name: "",
         image: null,
     })
 
     const fetchData = async () => {
-        const prodRes = await api.get("/products")
+        const eveRes = await api.get("/events")
         const catRes = await api.get("/categories")
 
-        setProducts(prodRes.data.data || prodRes.data || [])
+        setEvents(eveRes.data.data || eveRes.data || [])
         setCategories(catRes.data.data || catRes.data || [])
     }
 
@@ -31,8 +30,8 @@ export default function Products() {
 
         setForm({
             ...form,
-            [name]: ["category_id", "diamond_amount", "price"].includes(name)
-                ? Number(value)
+            [name]: ["category_id", "name"].includes(name)
+                ? String(value)
                 : value,
         })
     }
@@ -47,28 +46,26 @@ export default function Products() {
         try {
             const formData = new FormData()
             formData.append("category_id", Number(form.category_id))
-            formData.append("diamond_amount", Number(form.diamond_amount))
-            formData.append("price", Number(form.price))
+            formData.append("name", String(form.name))
             if (form.image) formData.append("image", form.image)
 
             if (editId) {
-                await api.put(`/products/${Number(editId)}`, formData)
+                await api.put(`/events/${Number(editId)}`, formData)
                 setEditId(null)
             } else {
-                await api.post("/products", formData)
+                await api.post("/events", formData)
             }
 
             setForm({
                 category_id: "",
-                diamond_amount: "",
-                price: "",
+                name: "",
                 image: null,
             })
 
             fetchData()
         } catch (err) {
             console.error(err.response?.data || err)
-            alert("Gagal menyimpan produk")
+            alert("Gagal menyimpan acara")
         }
     }
 
@@ -76,30 +73,29 @@ export default function Products() {
         setEditId(p.id)
         setForm({
             category_id: Number(p.category_id),
-            diamond_amount: Number(p.diamond_amount),
-            price: Number(p.price),
+            name: String(p.name),
             image: null,
         })
     }
 
     const handleDelete = async (id) => {
-        if (!confirm("Hapus produk ini?")) return
+        if (!confirm("Hapus acara ini?")) return
 
         try {
-            await api.delete(`/products/${Number(id)}`)
+            await api.delete(`/events/${Number(id)}`)
             fetchData()
         } catch (err) {
             console.error(err.response?.data || err)
-            alert("Produk gagal dihapus (cek relasi transaksi)")
+            alert("Acara gagal dihapus")
         }
     }
 
     return (
-        <AdminLayout title="Products">
-            <h1 className="text-3xl font-bold mb-8 text-white">Kelola Produk 🎮</h1>
+        <AdminLayout title="Events">
+            <h1 className="text-3xl font-bold mb-8 text-white">Kelola Acara</h1>
 
             <div className="bg-navy-800 p-6 rounded-2xl border border-navy-700 shadow-xl mb-8">
-                <h2 className="text-xl font-bold text-gray-300 mb-4">{editId ? "Edit Produk" : "Tambah Produk Baru"}</h2>
+                <h2 className="text-xl font-bold text-gray-300 mb-4">{editId ? "Edit Acara" : "Tambah Acara Baru"}</h2>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <select
                         name="category_id"
@@ -117,21 +113,11 @@ export default function Products() {
                     </select>
 
                     <input
-                        name="diamond_amount"
-                        type="number"
-                        value={form.diamond_amount}
+                        name="name"
+                        type="text"
+                        value={form.name}
                         onChange={handleChange}
-                        placeholder="Jumlah Diamond"
-                        className="bg-navy-900 border border-navy-600 text-white p-3 rounded-xl focus:outline-none focus:border-accent"
-                        required
-                    />
-
-                    <input
-                        name="price"
-                        type="number"
-                        value={form.price}
-                        onChange={handleChange}
-                        placeholder="Harga (Rp)"
+                        placeholder="Nama Acara"
                         className="bg-navy-900 border border-navy-600 text-white p-3 rounded-xl focus:outline-none focus:border-accent"
                         required
                     />
@@ -144,7 +130,7 @@ export default function Products() {
                     </div>
 
                     <button className="md:col-span-4 bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-bold shadow-lg shadow-accent/20 transition-all transform hover:-translate-y-1">
-                        {editId ? "Update Produk" : "Simpan Produk"}
+                        {editId ? "Update Acara" : "Simpan Acara"}
                     </button>
                 </form>
             </div>
@@ -155,20 +141,18 @@ export default function Products() {
                         <thead className="bg-navy-900 text-gray-400">
                             <tr>
                                 <th className="p-4">Kategori</th>
-                                <th className="p-4">Diamond</th>
-                                <th className="p-4">Harga</th>
+                                <th className="p-4">Nama acara</th>
                                 <th className="p-4">Gambar</th>
                                 <th className="p-4">Aksi</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-navy-700">
-                            {products.map((p) => (
+                            {events.map((p) => (
                                 <tr key={p.id} className="hover:bg-navy-700/50 transition-colors">
                                     <td className="p-4 text-white font-medium">
                                         {categories.find(c => c.id === p.category_id)?.name || "-"}
                                     </td>
-                                    <td className="p-4 text-accent">{p.diamond_amount} 💎</td>
-                                    <td className="p-4 text-green-400">Rp {p.price.toLocaleString()}</td>
+                                    <td className="p-4">{p.name}</td>
                                     <td className="p-4">
                                         {p.image && (
                                             <img
@@ -192,9 +176,9 @@ export default function Products() {
                         </tbody>
                     </table>
                 </div>
-                {products.length === 0 && (
+                {events.length === 0 && (
                     <div className="p-8 text-center text-gray-500">
-                        Belum ada produk.
+                        Belum ada acara.
                     </div>
                 )}
             </div>

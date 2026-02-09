@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const transactionsRoutes = require('./routes/transactionRoutes');
 const gameCategoryRoutes = require('./routes/gameCategoryRoutes');
+const eventRoutes = require('./routes/eventRoutes');
 const multer = require('multer');
 
 const app = express();
@@ -17,6 +18,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/transactions', transactionsRoutes);
 app.use('/api/categories', gameCategoryRoutes);
+app.use('/api/events', eventRoutes)
 
 app.get("/", (req, res) => {
     res.send('backend aman men');

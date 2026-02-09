@@ -12,14 +12,14 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    const allowed = /jpg|jpeg|png|webp/;
+    const allowed = /jpg|jpeg|png|webp|svg/;
     const ext = path.extname(file.originalname).toLowerCase();
     const mime = file.mimetype;
 
-    if (allowed.test(ext) && mime.startsWith('image/')) {
+    if (allowed.test(ext) && mime.startsWith('image/') || mime === "image/svg+xml") {
         cb(null, true);
     } else {
-        cb(new Error('File harus berupa JPG, PNG'), false);
+        cb(new Error('File harus berupa JPG, PNG, atau SVG'), false);
     }
 };
 
