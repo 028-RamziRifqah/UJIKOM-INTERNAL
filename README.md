@@ -39,15 +39,16 @@ Setiap kali aplikasi melakukan pengambilan data (fetching) dari API, aplikasi me
 - **Backend**: Menggunakan middleware error global di Express (pada `index.js`) untuk menangkap semua error yang terjadi di controller dan mengirimkan response JSON yang seragam (misal: status 400).
 
 ## Implementasi CRUD (API Operations)
-
-Sistem ini mengimplementasikan operasi CRUD melalui metode HTTP standar:
-
-| Metode | Fungsi Utama | Contoh Endpoint | Deskripsi |
-| :--- | :--- | :--- | :--- |
-| **GET** | Read Data | `/api/categories` | Mengambil data daftar game dari database. |
-| **POST** | Create Data | `/api/transactions` | Mengirim data pembelian baru atau melakukan Register/Login. |
-| **PUT** | Update Data | `/api/transactions/:id/status` | Admin memperbarui status transaksi (misal: dari pending ke sukses). |
-| **DELETE** | Delete Data | `/api/products/:id` | Menghapus paket Diamond atau kategori game dari dashboard admin. |
-
----
-
+Sistem ini mengimplementasikan operasi CRUD melalui metode HTTP standar sebagai berikut:
+Metode GET digunakan untuk membaca atau mengambil data.
+Contoh endpoint: /api/categories
+Fungsinya untuk mengambil data daftar game dari database.
+Metode POST digunakan untuk membuat atau menambahkan data baru.
+Contoh endpoint: /api/transactions
+Fungsinya untuk mengirim data pembelian baru atau melakukan proses Register dan Login.
+Metode PUT digunakan untuk memperbarui data yang sudah ada.
+Contoh endpoint: /api/transactions/:id/status
+Fungsinya agar admin dapat memperbarui status transaksi, misalnya dari pending menjadi sukses.
+Metode DELETE digunakan untuk menghapus data.
+Contoh endpoint: /api/products/:id
+Fungsinya untuk menghapus paket Diamond atau kategori game dari dashboard admin.
