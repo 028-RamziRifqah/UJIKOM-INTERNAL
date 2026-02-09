@@ -19,23 +19,7 @@ Aplikasi ini dibagi menjadi dua modul utama:
 
 ## Alur Arsitektur
 
-Platform ini menggunakan pola arsitektur **Client-Server**:
-
-```mermaid
-graph LR
-    subgraph "Frontend (React)"
-        A[UI Components] --> B[Axios Service]
-    end
-    
-    subgraph "Backend (Node.js/Express)"
-        B --> C[Routes]
-        C --> D[Controllers]
-    end
-    
-    subgraph "Database (MySQL)"
-        D --> E[(Database Queries)]
-    end
-```
+Platform ini menggunakan pola arsitektur Client-Server
 
 1.  **Frontend**: Menangani antarmuka pengguna, menerima input, dan menampilkan data secara reaktif.
 2.  **Backend**: Menerima request dari frontend, melakukan logika bisnis, validasi, dan autentikasi JWT.
