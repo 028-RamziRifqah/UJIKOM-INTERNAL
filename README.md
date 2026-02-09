@@ -40,15 +40,22 @@ Setiap kali aplikasi melakukan pengambilan data (fetching) dari API, aplikasi me
 
 ## Implementasi CRUD (API Operations)
 Sistem ini mengimplementasikan operasi CRUD melalui metode HTTP standar sebagai berikut:
-Metode GET digunakan untuk membaca atau mengambil data.
+-GET
+Digunakan untuk membaca atau mengambil data.
 Contoh endpoint: /api/categories
-Fungsinya untuk mengambil data daftar game dari database.
-Metode POST digunakan untuk membuat atau menambahkan data baru.
+Berfungsi untuk mengambil data daftar game dari database.
+
+-POST
+Digunakan untuk membuat atau menambahkan data baru.
 Contoh endpoint: /api/transactions
-Fungsinya untuk mengirim data pembelian baru atau melakukan proses Register dan Login.
-Metode PUT digunakan untuk memperbarui data yang sudah ada.
+Berfungsi untuk mengirim data pembelian baru atau melakukan proses Register dan Login. 
+
+-PUT
+Digunakan untuk memperbarui data yang sudah ada.
 Contoh endpoint: /api/transactions/:id/status
-Fungsinya agar admin dapat memperbarui status transaksi, misalnya dari pending menjadi sukses.
-Metode DELETE digunakan untuk menghapus data.
+Berfungsi agar admin dapat memperbarui status transaksi, misalnya dari pending menjadi sukses.
+
+-DELETE
+Digunakan untuk menghapus data.
 Contoh endpoint: /api/products/:id
-Fungsinya untuk menghapus paket Diamond atau kategori game dari dashboard admin.
+Berfungsi untuk menghapus paket Diamond atau kategori game dari dashboard admin.
