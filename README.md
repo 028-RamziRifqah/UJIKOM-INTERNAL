@@ -63,8 +63,8 @@ Berfungsi untuk menghapus paket Diamond atau kategori game dari dashboard admin.
 ## Cara Instalasi & Jalankan
 
 ### 1. Prasyarat
-- **Node.js**: Versi terbaru (LTS direkomendasikan).
-- **MySQL**: Aktif (XAMPP atau MySQL Server).
+- **Node.js**
+- **MySQL**: Laragon/XAMPP Pilih salah satu
 
 ### 2. Setup Database
 Buat database bernama `be_ujikom` dan jalankan query berikut untuk membuat tabel:
